@@ -2,7 +2,7 @@
 
 This repository is used to test the PullGuard security analysis tool.
 
-**Test Run**: Verifying PullGuard Azure API integration
+**Test Run**: Testing inline comment posting from Azure API
 
 PullGuard analyzes pull requests for security vulnerabilities and provides automated feedback.
 
