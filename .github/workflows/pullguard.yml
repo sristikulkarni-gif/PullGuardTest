@@ -1,0 +1,98 @@
+name: PullGuard Security Analysis
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ main ]
+
+jobs:
+  security-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+
+    steps:
+      - name: PullGuard Analysis
+        run: |
+          echo "🔒 Running PullGuard Security Analysis..."
+
+          # Call PullGuard Azure API with supported parameters
+          response=$(curl -X POST "https://pullguard-api-bzbqdzfdgqe8hne5.eastus-01.azurewebsites.net/api/v1/analyze-pr" \
+            -H "X-API-Key: ${{ secrets.PULLGUARD_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "github_token": "${{ secrets.GITHUB_TOKEN }}",
+              "repository": "${{ github.repository }}",
+              "pr_number": ${{ github.event.pull_request.number }},
+              "mode": "all",
+              "comment_style": "both"
+            }' \
+            -w "\n%{http_code}" \
+            -o response.json)
+
+          # Extract HTTP status code
+          http_code=$(tail -n1 <<< "$response")
+
+          echo "HTTP Status: $http_code"
+          echo ""
+
+          # Display response
+          echo "📊 Analysis Results:"
+          cat response.json | jq '.'
+
+          # Check if request was successful
+          if [ "$http_code" -ne 200 ]; then
+            echo "❌ Error: PullGuard API returned status $http_code"
+            cat response.json
+            exit 1
+          fi
+
+          # Extract policy status
+          policy_status=$(cat response.json | jq -r '.policy_status')
+
+          echo ""
+          echo "🎯 Policy Status: $policy_status"
+
+          # Fail the job if critical violations found
+          if [ "$policy_status" = "failed" ]; then
+            echo "⚠️  Critical security violations detected!"
+            exit 1
+          fi
+
+          echo "✅ PullGuard analysis complete!"
+
+      - name: Upload Analysis Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pullguard-analysis
+          path: response.json
+
+      - name: Job Summary
+        if: always()
+        run: |
+          echo "## 🔒 PullGuard Security Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f "response.json" ]; then
+            violations_total=$(cat response.json | jq -r '.violations.total')
+            violations_critical=$(cat response.json | jq -r '.violations.critical')
+            violations_high=$(cat response.json | jq -r '.violations.high')
+            comments_posted=$(cat response.json | jq -r '.comments_posted')
+            policy_status=$(cat response.json | jq -r '.policy_status')
+
+            echo "**Policy Status:** \`$policy_status\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Violations Found:** $violations_total" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔴 Critical: $violations_critical" >> $GITHUB_STEP_SUMMARY
+            echo "- 🟠 High: $violations_high" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Comments Posted:** $comments_posted" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "---" >> $GITHUB_STEP_SUMMARY
+            echo "*Powered by [PullGuard](https://github.com/sristikulkarni-gif/PullGuardProject)*" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No response data available" >> $GITHUB_STEP_SUMMARY
+          fi
