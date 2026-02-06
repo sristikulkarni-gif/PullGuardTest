@@ -18,3 +18,4 @@ This is a test repository to demonstrate PullGuard's capabilities:
 
 Create pull requests with code changes to trigger PullGuard analysis.
 # Test: Production deployment with AST+AI separation
+# Test: Artifact generation and duplicate prevention
