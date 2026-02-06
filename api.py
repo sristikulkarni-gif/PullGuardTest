@@ -25,7 +25,7 @@ def run_script(script_name):
     """
     HIGH VULNERABILITY: Command Injection via subprocess
     """
-    result = subprocess.run(f"python3 {script_name}", shell=True, capture_output=True)
+    result = subprocess.run(["python3", script_name], capture_output=True)
     return result.stdout
 
 def generate_session_token():
