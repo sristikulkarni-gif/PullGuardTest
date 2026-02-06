@@ -145,18 +145,36 @@ jobs:
         run: |
           echo "🌐 Generating interactive HTML viewer..."
 
-          # Copy HTML template from repository
-          cp pullguard-viewer-template.html pullguard-report.html
+          # Use Python for safe string replacement
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import sys
 
-          # Read content files and escape for JavaScript
-          pr_summary=$(cat pr_summary.md | jq -Rs .)
-          issues_json=$(cat issues.json | jq -Rs .)
-          policy_report=$(cat policy_report.md | jq -Rs .)
+          # Read the template
+          with open('pullguard-viewer-template.html', 'r') as f:
+              template = f.read()
 
-          # Replace placeholders (using | as delimiter to avoid conflicts)
-          sed -i "s|const prSummary=\`__PR_SUMMARY__\`;|const prSummary=${pr_summary};|g" pullguard-report.html
-          sed -i "s|const issuesJson=\`__ISSUES_JSON__\`;|const issuesJson=${issues_json};|g" pullguard-report.html
-          sed -i "s|const policyReport=\`__POLICY_REPORT__\`;|const policyReport=${policy_report};|g" pullguard-report.html
+          # Read content files
+          with open('pr_summary.md', 'r') as f:
+              pr_summary = f.read()
+
+          with open('issues.json', 'r') as f:
+              issues_json = f.read()
+
+          with open('policy_report.md', 'r') as f:
+              policy_report = f.read()
+
+          # Replace placeholders with JSON-escaped content (backticks removed, use JSON string)
+          template = template.replace('`__PR_SUMMARY__`', json.dumps(pr_summary))
+          template = template.replace('`__ISSUES_JSON__`', json.dumps(issues_json))
+          template = template.replace('`__POLICY_REPORT__`', json.dumps(policy_report))
+
+          # Write output
+          with open('pullguard-report.html', 'w') as f:
+              f.write(template)
+
+          print("✅ HTML viewer generated successfully")
+          PYTHON_SCRIPT
 
           echo "✅ Generated pullguard-report.html"
           echo "🌐 HTML viewer is ready with all content embedded!"
