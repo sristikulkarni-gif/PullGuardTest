@@ -9,7 +9,7 @@ jobs:
   security-review:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
       checks: write
 
@@ -80,18 +80,12 @@ jobs:
           echo "$pr_summary" > pr_summary.md
           echo "✅ Generated pr_summary.md"
 
-          # Generate issues.json (directly in root)
-          cat response.json | jq '{
+          # Generate issues.json with all response.json data merged
+          cat response.json | jq '. + {
             repository: "${{ github.repository }}",
-            pr_number: ${{ github.event.pull_request.number }},
-            timestamp: .timestamp,
-            violations_count: .violations.total,
-            policy_status: .policy_status,
-            violations: .violations.details,
-            ai_suggestions: .ai_suggestions,
-            cost_summary: .cost_summary
+            pr_number: ${{ github.event.pull_request.number }}
           }' > issues.json
-          echo "✅ Generated issues.json"
+          echo "✅ Generated issues.json (merged with response.json)"
 
           # Generate policy_report.md
           cat > policy_report.md << 'EOFPOLICY'
@@ -179,6 +173,16 @@ jobs:
           echo "✅ Generated pullguard-report.html"
           echo "🌐 HTML viewer is ready with all content embedded!"
 
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          destination_dir: reports/pr-${{ github.event.pull_request.number }}
+          keep_files: true
+          enable_jekyll: false
+
       - name: Upload Analysis Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -225,9 +229,9 @@ jobs:
 
             echo "### 🌐 Interactive Report Viewer" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**[🚀 Open Interactive Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)**" >> $GITHUB_STEP_SUMMARY
+            echo "**[🚀 Open Interactive Report](https://sristikulkarni-gif.github.io/PullGuardTest/reports/pr-${{ github.event.pull_request.number }}/pullguard-report.html)**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "👆 Click above → Download \`pullguard-analysis\` → Open \`pullguard-report.html\` in your browser" >> $GITHUB_STEP_SUMMARY
+            echo "👆 Click above to view the report directly in your browser (no download needed!)" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "The interactive viewer includes:" >> $GITHUB_STEP_SUMMARY
             echo "- 🛡️ **Beautiful PullGuard UI** with statistics dashboard" >> $GITHUB_STEP_SUMMARY
@@ -235,9 +239,9 @@ jobs:
             echo "- 📋 **Issues JSON** - Formatted with syntax highlighting" >> $GITHUB_STEP_SUMMARY
             echo "- 📊 **Policy Report** - Full compliance details" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 📁 Raw Files (Also Available)" >> $GITHUB_STEP_SUMMARY
+            echo "### 📁 Raw Files" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "All files can be downloaded separately from the artifacts:" >> $GITHUB_STEP_SUMMARY
+            echo "[Download artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts) to get all files:" >> $GITHUB_STEP_SUMMARY
             echo "- \`pr_summary.md\` - Markdown summary" >> $GITHUB_STEP_SUMMARY
             echo "- \`issues.json\` - Machine-readable findings" >> $GITHUB_STEP_SUMMARY
             echo "- \`policy_report.md\` - Policy compliance report" >> $GITHUB_STEP_SUMMARY
