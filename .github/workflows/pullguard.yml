@@ -86,12 +86,13 @@ jobs:
           echo -e "$pr_summary" > pr_summary.md
           echo "✅ Generated pr_summary.md"
 
-          # Generate issues.json (without pr_summary - it's in PR Summary tab)
-          cat response.json | jq '. + {
+          # Generate issues.json - copy entire response.json with additions
+          # Keep ALL fields (violations, details, status, etc.) - only remove pr_summary
+          cat response.json | jq 'del(.pr_summary) + {
             repository: "${{ github.repository }}",
             pr_number: ${{ github.event.pull_request.number }}
-          } | del(.pr_summary)' > issues.json
-          echo "✅ Generated issues.json (without pr_summary field)"
+          }' > issues.json
+          echo "✅ Generated issues.json (all data, no pr_summary)"
 
           # Generate policy_report.md with variable expansion
           cat > policy_report.md << EOFPOLICY
