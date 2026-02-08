@@ -74,25 +74,47 @@ jobs:
           # Check if response.json exists
           if [ ! -f "response.json" ]; then
             echo "❌ response.json not found! Creating fallback..."
-            echo '{"status":"error","pr_summary":"API call failed","violations":{"total":0,"critical":0,"high":0,"medium":0,"low":0},"policy_status":"error"}' > response.json
+            echo '{"status":"error","pr_summary":"API call failed","violations":{"total":0,"critical":0,"high":0,"medium":0,"low":0,"details":[]},"policy_status":"error","violations_count":0,"ai_suggestions":0}' > response.json
           fi
+
+          # Debug: Show entire response.json
+          echo "📋 Full API Response:"
+          cat response.json | jq '.' || cat response.json
 
           # Extract data from API response
           pr_summary=$(cat response.json | jq -r '.pr_summary // "No summary available"')
           violations=$(cat response.json | jq '.violations // {}')
           policy_status=$(cat response.json | jq -r '.policy_status // "unknown"')
+          violations_count=$(cat response.json | jq -r '.violations_count // .violations.total // 0')
+
+          echo "Extracted data:"
+          echo "- violations_count: $violations_count"
+          echo "- policy_status: $policy_status"
+          echo "- pr_summary length: ${#pr_summary}"
 
           # Generate pr_summary.md (directly in root) - unescape newlines
           echo -e "$pr_summary" > pr_summary.md
           echo "✅ Generated pr_summary.md"
 
           # Generate issues.json - copy entire response.json with additions
-          # Keep ALL fields (violations, details, status, etc.) - only remove pr_summary
-          cat response.json | jq 'del(.pr_summary) + {
+          # Keep ALL fields except pr_summary (which is in PR Summary tab)
+          cat response.json | jq '{
+            status: .status,
+            violations_count: (.violations_count // .violations.total // 0),
+            violations: .violations,
+            ai_suggestions: .ai_suggestions,
+            comments_posted: .comments_posted,
+            policy_status: .policy_status,
+            timestamp: .timestamp,
+            failed_on_policy: .failed_on_policy,
+            cost_summary: .cost_summary,
             repository: "${{ github.repository }}",
             pr_number: ${{ github.event.pull_request.number }}
           }' > issues.json
-          echo "✅ Generated issues.json (all data, no pr_summary)"
+          echo "✅ Generated issues.json (structured data, no pr_summary)"
+
+          echo "📊 Generated issues.json preview:"
+          head -30 issues.json
 
           # Generate policy_report.md with variable expansion
           cat > policy_report.md << EOFPOLICY
