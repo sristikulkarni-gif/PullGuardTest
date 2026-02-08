@@ -86,16 +86,12 @@ jobs:
           echo -e "$pr_summary" > pr_summary.md
           echo "✅ Generated pr_summary.md"
 
-          # Generate issues.json with properly formatted pr_summary (no escaped \n)
-          # Read pr_summary.md (which has real newlines) and embed it
-          pr_summary_clean=$(cat pr_summary.md)
-
-          cat response.json | jq --arg summary "$pr_summary_clean" '. + {
-            pr_summary: $summary,
+          # Generate issues.json (without pr_summary - it's in PR Summary tab)
+          cat response.json | jq '. + {
             repository: "${{ github.repository }}",
             pr_number: ${{ github.event.pull_request.number }}
-          }' > issues.json
-          echo "✅ Generated issues.json (merged with clean pr_summary)"
+          } | del(.pr_summary)' > issues.json
+          echo "✅ Generated issues.json (without pr_summary field)"
 
           # Generate policy_report.md with variable expansion
           cat > policy_report.md << EOFPOLICY

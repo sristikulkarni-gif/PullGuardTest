@@ -488,20 +488,8 @@
                 document.getElementById('summaryModal').style.display = 'block';
             } else if (type === 'issues') {
                 try {
-                    const issuesObj = JSON.parse(issuesJsonText);
-                    // Extract and display pr_summary separately
-                    let displayHtml = '';
-                    if (issuesObj.pr_summary) {
-                        displayHtml = '<div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">';
-                        displayHtml += '<h3 style="margin-top: 0; color: #333;">PR Summary</h3>';
-                        displayHtml += '<div class="markdown-content">' + markdownToHtml(issuesObj.pr_summary) + '</div>';
-                        displayHtml += '</div>';
-                        // Remove from JSON to avoid duplication
-                        delete issuesObj.pr_summary;
-                    }
-                    const formatted = JSON.stringify(issuesObj, null, 2);
-                    displayHtml += '<pre style="margin: 0; background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; overflow-x: auto;">' + formatted + '</pre>';
-                    document.getElementById('issuesContent').innerHTML = displayHtml;
+                    const formatted = JSON.stringify(JSON.parse(issuesJsonText), null, 2);
+                    document.getElementById('issuesContent').textContent = formatted;
                 } catch (e) {
                     console.error('Error formatting JSON:', e);
                     document.getElementById('issuesContent').textContent = issuesJsonText || 'No data available';
