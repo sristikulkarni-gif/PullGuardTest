@@ -249,11 +249,23 @@
             margin-bottom: 15px;
         }
 
+        .markdown-content p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
         .markdown-content code {
             background: #f0f0f0;
             padding: 2px 6px;
             border-radius: 3px;
             font-size: 0.9em;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .markdown-content hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 20px 0;
         }
 
         .footer {
@@ -337,8 +349,8 @@
     <script>
         // Embedded data (will be replaced by workflow)
         const prSummary = "## \ud83d\udee1\ufe0f PullGuard Security Review\n\n**Status:** \u274c FAILED\n\n### \ud83d\udcca Analysis Results\n\n**AST Policy Violations:** 13 _(all posted, no limit)_\n- \ud83d\udd34 Critical: 8\n- \ud83d\udfe0 High: 5\n- \ud83d\udfe1 Medium: 0\n- \ud83d\udd35 Low: 0\n\n**\ud83e\udd16 AI-Powered Code Fixes:** 13 _(max: 30)_\n- Semantic error detection\n- Security vulnerability fixes\n- Replaceable code suggestions\n\n### \ud83d\udd0d Top Critical Issues\n\n1. \ud83d\udd34 **Dangerous use of 'eval()' detected. This can execute arbitrary code.**\n   - File: `api.py:50`\n   - Rule: `PY-AST-001`\n\n2. \ud83d\udd34 **Hardcoded API key detected. Use environment variables or secrets management.**\n   - File: `api.py:12`\n   - Rule: `PY-SECRET-001`\n\n3. \ud83d\udd34 **Command injection via os.system() with f-string. Use parameterized commands or shell=False.**\n   - File: `api.py:19`\n   - Rule: `PY-CMD-001`\n\n4. \ud83d\udd34 **Command injection via subprocess with shell=True. Use parameterized commands or shell=False.**\n   - File: `api.py:22`\n   - Rule: `PY-CMD-001`\n\n5. \ud83d\udd34 **Hardcoded password detected. Use environment variables or secrets management.**\n   - File: `database.py:9`\n   - Rule: `PY-SECRET-001`\n\n---\n_\ud83d\udca1 Click on AI suggestions in inline comments to apply fixes directly_\n\n*Powered by [PullGuard](https://github.com/sristikulkarni-gif/PullGuardProject) - Azure AI Security Analysis*\n";
-        const issuesJson = "{\n  \"status\": \"success\",\n  \"pr_summary\": \"## \ud83d\udee1\ufe0f PullGuard Security Review\\n\\n**Status:** \u274c FAILED\\n\\n### \ud83d\udcca Analysis Results\\n\\n**AST Policy Violations:** 13 _(all posted, no limit)_\\n- \ud83d\udd34 Critical: 8\\n- \ud83d\udfe0 High: 5\\n- \ud83d\udfe1 Medium: 0\\n- \ud83d\udd35 Low: 0\\n\\n**\ud83e\udd16 AI-Powered Code Fixes:** 13 _(max: 30)_\\n- Semantic error detection\\n- Security vulnerability fixes\\n- Replaceable code suggestions\\n\\n### \ud83d\udd0d Top Critical Issues\\n\\n1. \ud83d\udd34 **Dangerous use of 'eval()' detected. This can execute arbitrary code.**\\n   - File: `api.py:50`\\n   - Rule: `PY-AST-001`\\n\\n2. \ud83d\udd34 **Hardcoded API key detected. Use environment variables or secrets management.**\\n   - File: `api.py:12`\\n   - Rule: `PY-SECRET-001`\\n\\n3. \ud83d\udd34 **Command injection via os.system() with f-string. Use parameterized commands or shell=False.**\\n   - File: `api.py:19`\\n   - Rule: `PY-CMD-001`\\n\\n4. \ud83d\udd34 **Command injection via subprocess with shell=True. Use parameterized commands or shell=False.**\\n   - File: `api.py:22`\\n   - Rule: `PY-CMD-001`\\n\\n5. \ud83d\udd34 **Hardcoded password detected. Use environment variables or secrets management.**\\n   - File: `database.py:9`\\n   - Rule: `PY-SECRET-001`\\n\\n---\\n_\ud83d\udca1 Click on AI suggestions in inline comments to apply fixes directly_\\n\\n*Powered by [PullGuard](https://github.com/sristikulkarni-gif/PullGuardProject) - Azure AI Security Analysis*\\n\",\n  \"violations\": {\n    \"total\": 13,\n    \"critical\": 8,\n    \"high\": 5,\n    \"medium\": 0,\n    \"low\": 0,\n    \"details\": [\n      {\n        \"id\": \"PY-AST-001\",\n        \"file\": \"api.py\",\n        \"line\": 50,\n        \"severity\": \"critical\",\n        \"message\": \"Dangerous use of 'eval()' detected. This can execute arbitrary code.\"\n      },\n      {\n        \"id\": \"PY-SECRET-001\",\n        \"file\": \"api.py\",\n        \"line\": 12,\n        \"severity\": \"critical\",\n        \"message\": \"Hardcoded API key detected. Use environment variables or secrets management.\"\n      },\n      {\n        \"id\": \"PY-CMD-001\",\n        \"file\": \"api.py\",\n        \"line\": 19,\n        \"severity\": \"critical\",\n        \"message\": \"Command injection via os.system() with f-string. Use parameterized commands or shell=False.\"\n      },\n      {\n        \"id\": \"PY-CMD-001\",\n        \"file\": \"api.py\",\n        \"line\": 22,\n        \"severity\": \"critical\",\n        \"message\": \"Command injection via subprocess with shell=True. Use parameterized commands or shell=False.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"api.py\",\n        \"line\": 36,\n        \"severity\": \"high\",\n        \"message\": \"Using insecure random module for security. Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"api.py\",\n        \"line\": 44,\n        \"severity\": \"high\",\n        \"message\": \"Insecure deserialization with pickle. Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"crypto.py\",\n        \"line\": 15,\n        \"severity\": \"high\",\n        \"message\": \"Weak hashing algorithm (MD5/SHA1). Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"crypto.py\",\n        \"line\": 31,\n        \"severity\": \"high\",\n        \"message\": \"Using insecure random module for security. Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"crypto.py\",\n        \"line\": 38,\n        \"severity\": \"high\",\n        \"message\": \"Weak hashing algorithm (MD5/SHA1). Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-SECRET-001\",\n        \"file\": \"database.py\",\n        \"line\": 9,\n        \"severity\": \"critical\",\n        \"message\": \"Hardcoded password detected. Use environment variables or secrets management.\"\n      },\n      {\n        \"id\": \"PY-SECRET-001\",\n        \"file\": \"database.py\",\n        \"line\": 10,\n        \"severity\": \"critical\",\n        \"message\": \"Hardcoded API key detected. Use environment variables or secrets management.\"\n      },\n      {\n        \"id\": \"PY-SQL-001\",\n        \"file\": \"database.py\",\n        \"line\": 22,\n        \"severity\": \"critical\",\n        \"message\": \"SQL injection via f-string formatting. Use parameterized queries.\"\n      },\n      {\n        \"id\": \"PY-SQL-001\",\n        \"file\": \"database.py\",\n        \"line\": 40,\n        \"severity\": \"critical\",\n        \"message\": \"SQL injection via f-string in UPDATE. Use parameterized queries.\"\n      }\n    ]\n  },\n  \"ai_suggestions\": 13,\n  \"comments_posted\": 27,\n  \"policy_status\": \"failed\",\n  \"cost_summary\": {\n    \"total_tokens\": 3760,\n    \"total_cost_usd\": 0.1211,\n    \"max_cost_usd\": 0.5,\n    \"remaining_budget_usd\": 0.3789,\n    \"budget_exceeded\": false\n  },\n  \"timestamp\": \"2026-02-08T07:08:16.097847\",\n  \"pr_summary_path\": \"/tmp/pullguard-artifacts/pr_summary.md\",\n  \"issues_json_path\": \"/tmp/pullguard-artifacts/issues.json\",\n  \"policy_report_path\": \"/tmp/pullguard-artifacts/policy_report.md\",\n  \"violations_count\": 13,\n  \"failed_on_policy\": true,\n  \"repository\": \"sristikulkarni-gif/PullGuardTest\",\n  \"pr_number\": 1\n}\n";
-        const policyReport = "# PullGuard Policy Compliance Report\n\n**Generated:** $(date -u +\"%Y-%m-%dT%H:%M:%SZ\")\n\n**Overall Status:** $(if [ \"$policy_status\" = \"failed\" ]; then echo \"\u274c FAILED\"; else echo \"\u2705 PASSED\"; fi)\n\n## Summary\n\n- **Total Violations:** $(cat response.json | jq -r '.violations.total')\n- **Critical:** $(cat response.json | jq -r '.violations.critical')\n- **High:** $(cat response.json | jq -r '.violations.high')\n- **Medium:** $(cat response.json | jq -r '.violations.medium')\n- **Low:** $(cat response.json | jq -r '.violations.low')\n\n## Policy Rules\n\nPullGuard enforces the following security policies:\n\n1. **No Hardcoded Secrets** - API keys, passwords, tokens must use environment variables\n2. **No SQL Injection** - Use parameterized queries, never concatenate user input\n3. **No Command Injection** - Avoid shell=True, sanitize inputs\n4. **No eval/exec** - Dangerous code execution functions prohibited\n5. **Strong Cryptography** - No MD5/SHA1, use SHA256+ or bcrypt/argon2\n6. **Secure Random** - Use secrets module for cryptographic operations\n7. **No Insecure Deserialization** - Avoid pickle with untrusted data\n\n## Recommendations\n\n$(if [ \"$policy_status\" = \"failed\" ]; then\n  echo \"- \u274c **This PR should not be merged** until critical and high severity issues are resolved\"\n  echo \"- Review the inline comments on the PR for specific fixes\"\n  echo \"- Apply AI-suggested fixes where available (click to apply)\"\nelse\n  echo \"- \u2705 **This PR passes all security policies** and can be merged\"\n  echo \"- Review any low/medium severity warnings for code quality improvements\"\nfi)\n\n---\n_Generated by PullGuard - Azure AI Security Analysis_\n";
+        const issuesJson = "{\n  \"status\": \"success\",\n  \"pr_summary\": \"## \ud83d\udee1\ufe0f PullGuard Security Review\\n\\n**Status:** \u274c FAILED\\n\\n### \ud83d\udcca Analysis Results\\n\\n**AST Policy Violations:** 13 _(all posted, no limit)_\\n- \ud83d\udd34 Critical: 8\\n- \ud83d\udfe0 High: 5\\n- \ud83d\udfe1 Medium: 0\\n- \ud83d\udd35 Low: 0\\n\\n**\ud83e\udd16 AI-Powered Code Fixes:** 13 _(max: 30)_\\n- Semantic error detection\\n- Security vulnerability fixes\\n- Replaceable code suggestions\\n\\n### \ud83d\udd0d Top Critical Issues\\n\\n1. \ud83d\udd34 **Dangerous use of 'eval()' detected. This can execute arbitrary code.**\\n   - File: `api.py:50`\\n   - Rule: `PY-AST-001`\\n\\n2. \ud83d\udd34 **Hardcoded API key detected. Use environment variables or secrets management.**\\n   - File: `api.py:12`\\n   - Rule: `PY-SECRET-001`\\n\\n3. \ud83d\udd34 **Command injection via os.system() with f-string. Use parameterized commands or shell=False.**\\n   - File: `api.py:19`\\n   - Rule: `PY-CMD-001`\\n\\n4. \ud83d\udd34 **Command injection via subprocess with shell=True. Use parameterized commands or shell=False.**\\n   - File: `api.py:22`\\n   - Rule: `PY-CMD-001`\\n\\n5. \ud83d\udd34 **Hardcoded password detected. Use environment variables or secrets management.**\\n   - File: `database.py:9`\\n   - Rule: `PY-SECRET-001`\\n\\n---\\n_\ud83d\udca1 Click on AI suggestions in inline comments to apply fixes directly_\\n\\n*Powered by [PullGuard](https://github.com/sristikulkarni-gif/PullGuardProject) - Azure AI Security Analysis*\\n\",\n  \"violations\": {\n    \"total\": 13,\n    \"critical\": 8,\n    \"high\": 5,\n    \"medium\": 0,\n    \"low\": 0,\n    \"details\": [\n      {\n        \"id\": \"PY-AST-001\",\n        \"file\": \"api.py\",\n        \"line\": 50,\n        \"severity\": \"critical\",\n        \"message\": \"Dangerous use of 'eval()' detected. This can execute arbitrary code.\"\n      },\n      {\n        \"id\": \"PY-SECRET-001\",\n        \"file\": \"api.py\",\n        \"line\": 12,\n        \"severity\": \"critical\",\n        \"message\": \"Hardcoded API key detected. Use environment variables or secrets management.\"\n      },\n      {\n        \"id\": \"PY-CMD-001\",\n        \"file\": \"api.py\",\n        \"line\": 19,\n        \"severity\": \"critical\",\n        \"message\": \"Command injection via os.system() with f-string. Use parameterized commands or shell=False.\"\n      },\n      {\n        \"id\": \"PY-CMD-001\",\n        \"file\": \"api.py\",\n        \"line\": 22,\n        \"severity\": \"critical\",\n        \"message\": \"Command injection via subprocess with shell=True. Use parameterized commands or shell=False.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"api.py\",\n        \"line\": 36,\n        \"severity\": \"high\",\n        \"message\": \"Using insecure random module for security. Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"api.py\",\n        \"line\": 44,\n        \"severity\": \"high\",\n        \"message\": \"Insecure deserialization with pickle. Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"crypto.py\",\n        \"line\": 15,\n        \"severity\": \"high\",\n        \"message\": \"Weak hashing algorithm (MD5/SHA1). Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"crypto.py\",\n        \"line\": 31,\n        \"severity\": \"high\",\n        \"message\": \"Using insecure random module for security. Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-CRYPTO-001\",\n        \"file\": \"crypto.py\",\n        \"line\": 38,\n        \"severity\": \"high\",\n        \"message\": \"Weak hashing algorithm (MD5/SHA1). Use secure alternatives.\"\n      },\n      {\n        \"id\": \"PY-SECRET-001\",\n        \"file\": \"database.py\",\n        \"line\": 9,\n        \"severity\": \"critical\",\n        \"message\": \"Hardcoded password detected. Use environment variables or secrets management.\"\n      },\n      {\n        \"id\": \"PY-SECRET-001\",\n        \"file\": \"database.py\",\n        \"line\": 10,\n        \"severity\": \"critical\",\n        \"message\": \"Hardcoded API key detected. Use environment variables or secrets management.\"\n      },\n      {\n        \"id\": \"PY-SQL-001\",\n        \"file\": \"database.py\",\n        \"line\": 22,\n        \"severity\": \"critical\",\n        \"message\": \"SQL injection via f-string formatting. Use parameterized queries.\"\n      },\n      {\n        \"id\": \"PY-SQL-001\",\n        \"file\": \"database.py\",\n        \"line\": 40,\n        \"severity\": \"critical\",\n        \"message\": \"SQL injection via f-string in UPDATE. Use parameterized queries.\"\n      }\n    ]\n  },\n  \"ai_suggestions\": 13,\n  \"comments_posted\": 27,\n  \"policy_status\": \"failed\",\n  \"cost_summary\": {\n    \"total_tokens\": 3790,\n    \"total_cost_usd\": 0.1229,\n    \"max_cost_usd\": 0.5,\n    \"remaining_budget_usd\": 0.3771,\n    \"budget_exceeded\": false\n  },\n  \"timestamp\": \"2026-02-08T07:20:56.755038\",\n  \"pr_summary_path\": \"/tmp/pullguard-artifacts/pr_summary.md\",\n  \"issues_json_path\": \"/tmp/pullguard-artifacts/issues.json\",\n  \"policy_report_path\": \"/tmp/pullguard-artifacts/policy_report.md\",\n  \"violations_count\": 13,\n  \"failed_on_policy\": true,\n  \"repository\": \"sristikulkarni-gif/PullGuardTest\",\n  \"pr_number\": 1\n}\n";
+        const policyReport = "# PullGuard Policy Compliance Report\n\n**Generated:** 2026-02-08T07:20:56Z\n\n**Overall Status:** \u274c FAILED\n\n## Summary\n\n- **Total Violations:** 13\n- **Critical:** 8\n- **High:** 5\n- **Medium:** 0\n- **Low:** 0\n\n## Policy Rules\n\nPullGuard enforces the following security policies:\n\n1. **No Hardcoded Secrets** - API keys, passwords, tokens must use environment variables\n2. **No SQL Injection** - Use parameterized queries, never concatenate user input\n3. **No Command Injection** - Avoid shell=True, sanitize inputs\n4. **No eval/exec** - Dangerous code execution functions prohibited\n5. **Strong Cryptography** - No MD5/SHA1, use SHA256+ or bcrypt/argon2\n6. **Secure Random** - Use secrets module for cryptographic operations\n7. **No Insecure Deserialization** - Avoid pickle with untrusted data\n\n## Recommendations\n\n- \u274c **This PR should not be merged** until critical and high severity issues are resolved\n- Review the inline comments on the PR for specific fixes\n- Apply AI-suggested fixes where available (click to apply)\n\n---\n_Generated by PullGuard - Azure AI Security Analysis_\n";
 
         // Debug: Log what we received
         console.log('PR Summary length:', prSummary.length);
@@ -416,16 +428,55 @@
             if (!markdown || markdown === '__PR_SUMMARY__' || markdown === '__POLICY_REPORT__') {
                 return '<p style="color: #999;">No content available</p>';
             }
-            return markdown
-                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+
+            // Split into lines for better processing
+            let lines = markdown.split('\n');
+            let html = '';
+            let inList = false;
+
+            for (let line of lines) {
+                // Headers
+                if (line.startsWith('### ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += '<h3>' + line.substring(4) + '</h3>';
+                } else if (line.startsWith('## ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += '<h2>' + line.substring(3) + '</h2>';
+                } else if (line.startsWith('# ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += '<h1>' + line.substring(2) + '</h1>';
+                }
+                // List items
+                else if (line.startsWith('- ')) {
+                    if (!inList) { html += '<ul>'; inList = true; }
+                    html += '<li>' + line.substring(2) + '</li>';
+                }
+                // Horizontal rule
+                else if (line.trim() === '---') {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += '<hr style="border: 1px solid #e0e0e0; margin: 20px 0;">';
+                }
+                // Empty line - paragraph break
+                else if (line.trim() === '') {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += '<br>';
+                }
+                // Regular text
+                else {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += '<p>' + line + '</p>';
+                }
+            }
+
+            if (inList) html += '</ul>';
+
+            // Apply inline formatting
+            html = html
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`(.*?)`/g, '<code>$1</code>')
-                .replace(/^- (.*$)/gim, '<ul><li>$1</li></ul>')
-                .replace(/<\/ul>\n<ul>/g, '')
-                .replace(/\n/g, '<br>');
+                .replace(/`(.*?)`/g, '<code>$1</code>');
+
+            return html;
         }
 
         function openModal(type) {
