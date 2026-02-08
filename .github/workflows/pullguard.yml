@@ -71,21 +71,31 @@ jobs:
         run: |
           echo "📁 Generating artifact files..."
 
+          # Check if response.json exists
+          if [ ! -f "response.json" ]; then
+            echo "❌ response.json not found! Creating fallback..."
+            echo '{"status":"error","pr_summary":"API call failed","violations":{"total":0,"critical":0,"high":0,"medium":0,"low":0},"policy_status":"error"}' > response.json
+          fi
+
           # Extract data from API response
-          pr_summary=$(cat response.json | jq -r '.pr_summary')
-          violations=$(cat response.json | jq '.violations')
-          policy_status=$(cat response.json | jq -r '.policy_status')
+          pr_summary=$(cat response.json | jq -r '.pr_summary // "No summary available"')
+          violations=$(cat response.json | jq '.violations // {}')
+          policy_status=$(cat response.json | jq -r '.policy_status // "unknown"')
 
           # Generate pr_summary.md (directly in root) - unescape newlines
           echo -e "$pr_summary" > pr_summary.md
           echo "✅ Generated pr_summary.md"
 
-          # Generate issues.json with all response.json data merged
-          cat response.json | jq '. + {
+          # Generate issues.json with properly formatted pr_summary (no escaped \n)
+          # Read pr_summary.md (which has real newlines) and embed it
+          pr_summary_clean=$(cat pr_summary.md)
+
+          cat response.json | jq --arg summary "$pr_summary_clean" '. + {
+            pr_summary: $summary,
             repository: "${{ github.repository }}",
             pr_number: ${{ github.event.pull_request.number }}
           }' > issues.json
-          echo "✅ Generated issues.json (merged with response.json)"
+          echo "✅ Generated issues.json (merged with clean pr_summary)"
 
           # Generate policy_report.md with variable expansion
           cat > policy_report.md << EOFPOLICY
