@@ -102,16 +102,16 @@
     ]
   },
   "ai_suggestions": 13,
-  "comments_posted": 27,
+  "comments_posted": 16,
   "policy_status": "failed",
   "cost_summary": {
-    "total_tokens": 3820,
-    "total_cost_usd": 0.1247,
+    "total_tokens": 3777,
+    "total_cost_usd": 0.1221,
     "max_cost_usd": 0.5,
-    "remaining_budget_usd": 0.3753,
+    "remaining_budget_usd": 0.3779,
     "budget_exceeded": false
   },
-  "timestamp": "2026-02-08T14:02:02.665086",
+  "timestamp": "2026-02-08T14:02:22.297367",
   "pr_summary_path": "/tmp/pullguard-artifacts/pr_summary.md",
   "issues_json_path": "/tmp/pullguard-artifacts/issues.json",
   "policy_report_path": "/tmp/pullguard-artifacts/policy_report.md",
