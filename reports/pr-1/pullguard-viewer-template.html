@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f5f5;
             min-height: 100vh;
             padding: 20px;
         }
@@ -25,15 +25,19 @@
 
         .header {
             text-align: center;
-            color: white;
+            color: #333;
             margin-bottom: 40px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .header h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             font-weight: 700;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #000;
         }
 
         .header .shield-icon {
@@ -42,14 +46,14 @@
         }
 
         .header p {
-            font-size: 1.2em;
-            opacity: 0.95;
+            font-size: 1.1em;
+            color: #666;
         }
 
         .card {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 40px;
             margin-bottom: 30px;
         }
@@ -62,20 +66,28 @@
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            color: #333;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 8px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            border-color: #666;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .stat-box h3 {
             font-size: 2.5em;
             margin-bottom: 5px;
+            color: #000;
         }
 
         .stat-box p {
-            opacity: 0.9;
+            color: #666;
             font-size: 0.9em;
         }
 
@@ -87,21 +99,21 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #333;
             color: white;
             padding: 20px 30px;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .btn:hover {
+            background: #000;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .btn-icon {
@@ -118,8 +130,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0,0,0,0.6);
             animation: fadeIn 0.3s ease;
         }
 
@@ -129,14 +140,14 @@
         }
 
         .modal-content {
-            background-color: #fefefe;
+            background-color: #fff;
             margin: 5% auto;
             padding: 0;
-            border-radius: 16px;
+            border-radius: 12px;
             width: 90%;
             max-width: 900px;
             max-height: 85vh;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             animation: slideUp 0.3s ease;
         }
 
@@ -152,10 +163,10 @@
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #333;
             color: white;
             padding: 20px 30px;
-            border-radius: 16px 16px 0 0;
+            border-radius: 12px 12px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -183,7 +194,6 @@
 
         .close:hover {
             background: rgba(255,255,255,0.3);
-            transform: rotate(90deg);
         }
 
         .modal-body {
@@ -193,8 +203,8 @@
         }
 
         .content-display {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
             padding: 20px;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
@@ -205,8 +215,9 @@
         }
 
         .json-content {
-            background: #282c34;
-            color: #abb2bf;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-color: #333;
         }
 
         .markdown-content {
@@ -216,15 +227,21 @@
         }
 
         .markdown-content h1 {
-            color: #667eea;
+            color: #000;
             margin-top: 0;
             margin-bottom: 20px;
         }
 
         .markdown-content h2 {
-            color: #764ba2;
+            color: #333;
             margin-top: 30px;
             margin-bottom: 15px;
+        }
+
+        .markdown-content h3 {
+            color: #666;
+            margin-top: 20px;
+            margin-bottom: 10px;
         }
 
         .markdown-content ul {
@@ -232,11 +249,17 @@
             margin-bottom: 15px;
         }
 
+        .markdown-content code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
         .footer {
             text-align: center;
-            color: white;
+            color: #666;
             margin-top: 40px;
-            opacity: 0.9;
         }
     </style>
 </head>
@@ -317,14 +340,48 @@
         const issuesJson = `__ISSUES_JSON__`;
         const policyReport = `__POLICY_REPORT__`;
 
+        // Debug: Log what we received
+        console.log('PR Summary length:', prSummary.length);
+        console.log('Issues JSON length:', issuesJson.length);
+        console.log('Policy Report length:', policyReport.length);
+        console.log('PR Summary starts with:', prSummary.substring(0, 50));
+
+        // Parse JSON strings back to plain text (Python json.dumps wraps them)
+        let prSummaryText = prSummary;
+        let issuesJsonText = issuesJson;
+        let policyReportText = policyReport;
+
+        try {
+            // If they're JSON strings, parse them
+            if (prSummary.startsWith('"')) {
+                prSummaryText = JSON.parse(prSummary);
+                console.log('Parsed PR summary');
+            }
+            if (issuesJson.startsWith('"')) {
+                issuesJsonText = JSON.parse(issuesJson);
+                console.log('Parsed issues JSON');
+            }
+            if (policyReport.startsWith('"')) {
+                policyReportText = JSON.parse(policyReport);
+                console.log('Parsed policy report');
+            }
+        } catch (e) {
+            console.error('Parse error:', e);
+        }
+
+        // Debug: Log parsed text
+        console.log('Parsed PR Summary length:', prSummaryText.length);
+        console.log('Parsed Issues JSON length:', issuesJsonText.length);
+        console.log('Parsed Policy Report length:', policyReportText.length);
+
         // Parse JSON to get stats
         try {
-            const issues = JSON.parse(issuesJson);
+            const issues = JSON.parse(issuesJsonText);
             const stats = document.getElementById('stats');
 
             stats.innerHTML = `
                 <div class="stat-box">
-                    <h3>${issues.violations_count || 0}</h3>
+                    <h3>${issues.violations_count || issues.violations?.total || 0}</h3>
                     <p>Total Violations</p>
                 </div>
                 <div class="stat-box">
@@ -338,10 +395,27 @@
             `;
         } catch (e) {
             console.error('Error parsing stats:', e);
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-box">
+                    <h3>N/A</h3>
+                    <p>Total Violations</p>
+                </div>
+                <div class="stat-box">
+                    <h3>N/A</h3>
+                    <p>AI Suggestions</p>
+                </div>
+                <div class="stat-box">
+                    <h3>N/A</h3>
+                    <p>Policy Status</p>
+                </div>
+            `;
         }
 
         // Simple markdown to HTML converter
         function markdownToHtml(markdown) {
+            if (!markdown || markdown === '__PR_SUMMARY__' || markdown === '__POLICY_REPORT__') {
+                return '<p style="color: #999;">No content available</p>';
+            }
             return markdown
                 .replace(/^### (.*$)/gim, '<h3>$1</h3>')
                 .replace(/^## (.*$)/gim, '<h2>$1</h2>')
@@ -355,19 +429,25 @@
         }
 
         function openModal(type) {
+            console.log('Opening modal:', type);
             if (type === 'summary') {
-                document.getElementById('summaryContent').innerHTML = markdownToHtml(prSummary);
+                const content = markdownToHtml(prSummaryText);
+                console.log('Summary content length:', content.length);
+                document.getElementById('summaryContent').innerHTML = content;
                 document.getElementById('summaryModal').style.display = 'block';
             } else if (type === 'issues') {
                 try {
-                    const formatted = JSON.stringify(JSON.parse(issuesJson), null, 2);
+                    const formatted = JSON.stringify(JSON.parse(issuesJsonText), null, 2);
                     document.getElementById('issuesContent').textContent = formatted;
                 } catch (e) {
-                    document.getElementById('issuesContent').textContent = issuesJson;
+                    console.error('Error formatting JSON:', e);
+                    document.getElementById('issuesContent').textContent = issuesJsonText || 'No data available';
                 }
                 document.getElementById('issuesModal').style.display = 'block';
             } else if (type === 'policy') {
-                document.getElementById('policyContent').innerHTML = markdownToHtml(policyReport);
+                const content = markdownToHtml(policyReportText);
+                console.log('Policy content length:', content.length);
+                document.getElementById('policyContent').innerHTML = content;
                 document.getElementById('policyModal').style.display = 'block';
             }
         }
