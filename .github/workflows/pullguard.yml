@@ -139,36 +139,74 @@ jobs:
         run: |
           echo "🌐 Generating interactive HTML viewer..."
 
+          # Debug: Show file sizes
+          echo "📊 File sizes before HTML generation:"
+          ls -lh pr_summary.md issues.json policy_report.md pullguard-viewer-template.html || echo "Some files missing"
+
+          echo ""
+          echo "📄 First 200 chars of pr_summary.md:"
+          head -c 200 pr_summary.md || echo "Cannot read pr_summary.md"
+
+          echo ""
+          echo "📋 First 200 chars of issues.json:"
+          head -c 200 issues.json || echo "Cannot read issues.json"
+
           # Use Python for safe string replacement
           python3 << 'PYTHON_SCRIPT'
           import json
           import sys
 
+          print("🐍 Python script starting...")
+
           # Read the template
           with open('pullguard-viewer-template.html', 'r') as f:
               template = f.read()
+          print(f"✅ Template read: {len(template)} chars")
 
           # Read content files
           with open('pr_summary.md', 'r') as f:
               pr_summary = f.read()
+          print(f"✅ PR Summary read: {len(pr_summary)} chars")
 
           with open('issues.json', 'r') as f:
               issues_json = f.read()
+          print(f"✅ Issues JSON read: {len(issues_json)} chars")
 
           with open('policy_report.md', 'r') as f:
               policy_report = f.read()
+          print(f"✅ Policy Report read: {len(policy_report)} chars")
 
-          # Replace placeholders with JSON-escaped content (backticks removed, use JSON string)
-          template = template.replace('`__PR_SUMMARY__`', json.dumps(pr_summary))
-          template = template.replace('`__ISSUES_JSON__`', json.dumps(issues_json))
-          template = template.replace('`__POLICY_REPORT__`', json.dumps(policy_report))
+          # Replace placeholders with JSON-escaped content
+          pr_summary_escaped = json.dumps(pr_summary)
+          issues_json_escaped = json.dumps(issues_json)
+          policy_report_escaped = json.dumps(policy_report)
+
+          print(f"✅ Escaped PR Summary: {len(pr_summary_escaped)} chars")
+          print(f"✅ Escaped Issues JSON: {len(issues_json_escaped)} chars")
+          print(f"✅ Escaped Policy Report: {len(policy_report_escaped)} chars")
+
+          template = template.replace('`__PR_SUMMARY__`', pr_summary_escaped)
+          template = template.replace('`__ISSUES_JSON__`', issues_json_escaped)
+          template = template.replace('`__POLICY_REPORT__`', policy_report_escaped)
+
+          # Check if replacements worked
+          if '__PR_SUMMARY__' in template:
+              print("⚠️  WARNING: __PR_SUMMARY__ still in template!")
+          if '__ISSUES_JSON__' in template:
+              print("⚠️  WARNING: __ISSUES_JSON__ still in template!")
+          if '__POLICY_REPORT__' in template:
+              print("⚠️  WARNING: __POLICY_REPORT__ still in template!")
 
           # Write output
           with open('pullguard-report.html', 'w') as f:
               f.write(template)
 
-          print("✅ HTML viewer generated successfully")
+          print(f"✅ HTML viewer generated: {len(template)} chars written")
           PYTHON_SCRIPT
+
+          echo ""
+          echo "📏 Generated HTML file size:"
+          ls -lh pullguard-report.html
 
           echo "✅ Generated pullguard-report.html"
           echo "🌐 HTML viewer is ready with all content embedded!"
@@ -237,13 +275,14 @@ jobs:
             echo "- 📋 **Issues JSON** - Formatted with syntax highlighting" >> $GITHUB_STEP_SUMMARY
             echo "- 📊 **Policy Report** - Full compliance details" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 📁 Raw Files" >> $GITHUB_STEP_SUMMARY
+            echo "### 📁 Download Raw Files" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "[Download artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts) to get all files:" >> $GITHUB_STEP_SUMMARY
+            echo "**[📥 Download Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Files included in \`pullguard-analysis.zip\`:" >> $GITHUB_STEP_SUMMARY
             echo "- \`pr_summary.md\` - Markdown summary" >> $GITHUB_STEP_SUMMARY
             echo "- \`issues.json\` - Machine-readable findings" >> $GITHUB_STEP_SUMMARY
             echo "- \`policy_report.md\` - Policy compliance report" >> $GITHUB_STEP_SUMMARY
-            echo "- \`pullguard-report.html\` - ⭐ Interactive web viewer" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
 
             echo "### 📝 Quick View" >> $GITHUB_STEP_SUMMARY
