@@ -76,8 +76,8 @@ jobs:
           violations=$(cat response.json | jq '.violations')
           policy_status=$(cat response.json | jq -r '.policy_status')
 
-          # Generate pr_summary.md (directly in root)
-          echo "$pr_summary" > pr_summary.md
+          # Generate pr_summary.md (directly in root) - unescape newlines
+          echo -e "$pr_summary" > pr_summary.md
           echo "✅ Generated pr_summary.md"
 
           # Generate issues.json with all response.json data merged
@@ -277,7 +277,7 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 📁 Download Raw Files" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**[📥 Download Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)**" >> $GITHUB_STEP_SUMMARY
+            echo "**[📥 Download Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)** (scroll to bottom of page)" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "Files included in \`pullguard-analysis.zip\`:" >> $GITHUB_STEP_SUMMARY
             echo "- \`pr_summary.md\` - Markdown summary" >> $GITHUB_STEP_SUMMARY
