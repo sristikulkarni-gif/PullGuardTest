@@ -87,8 +87,8 @@ jobs:
           }' > issues.json
           echo "✅ Generated issues.json (merged with response.json)"
 
-          # Generate policy_report.md
-          cat > policy_report.md << 'EOFPOLICY'
+          # Generate policy_report.md with variable expansion
+          cat > policy_report.md << EOFPOLICY
           # PullGuard Policy Compliance Report
 
           **Generated:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")
