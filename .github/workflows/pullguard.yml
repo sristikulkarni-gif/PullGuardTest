@@ -186,17 +186,25 @@ jobs:
               policy_report = f.read()
           print(f"✅ Policy Report read: {len(policy_report)} chars")
 
-          # Replace placeholders with JSON-escaped content
+          # Replace placeholders
+          # For markdown content (pr_summary, policy_report): escape as JSON strings
           pr_summary_escaped = json.dumps(pr_summary)
-          issues_json_escaped = json.dumps(issues_json)
           policy_report_escaped = json.dumps(policy_report)
 
+          # For issues.json: it's already valid JSON, so DON'T double-encode
+          # Just validate it's valid JSON, then use as-is
+          try:
+              json.loads(issues_json)  # validate
+              print(f"✅ Issues JSON is valid: {len(issues_json)} chars")
+          except Exception as e:
+              print(f"⚠️  Issues JSON validation failed: {e}")
+
           print(f"✅ Escaped PR Summary: {len(pr_summary_escaped)} chars")
-          print(f"✅ Escaped Issues JSON: {len(issues_json_escaped)} chars")
           print(f"✅ Escaped Policy Report: {len(policy_report_escaped)} chars")
 
+          # Replace in template
           template = template.replace('`__PR_SUMMARY__`', pr_summary_escaped)
-          template = template.replace('`__ISSUES_JSON__`', issues_json_escaped)
+          template = template.replace('`__ISSUES_JSON__`', issues_json)  # NO json.dumps!
           template = template.replace('`__POLICY_REPORT__`', policy_report_escaped)
 
           # Check if replacements worked
