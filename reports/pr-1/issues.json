@@ -105,13 +105,13 @@
   "comments_posted": 27,
   "policy_status": "failed",
   "cost_summary": {
-    "total_tokens": 3787,
-    "total_cost_usd": 0.1227,
+    "total_tokens": 3775,
+    "total_cost_usd": 0.122,
     "max_cost_usd": 0.5,
-    "remaining_budget_usd": 0.3773,
+    "remaining_budget_usd": 0.378,
     "budget_exceeded": false
   },
-  "timestamp": "2026-02-08T07:37:05.551506",
+  "timestamp": "2026-02-08T07:39:06.175976",
   "pr_summary_path": "/tmp/pullguard-artifacts/pr_summary.md",
   "issues_json_path": "/tmp/pullguard-artifacts/issues.json",
   "policy_report_path": "/tmp/pullguard-artifacts/policy_report.md",
