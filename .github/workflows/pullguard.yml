@@ -189,11 +189,9 @@ jobs:
         with:
           name: pullguard-analysis
           path: |
-            response.json
             pr_summary.md
             issues.json
             policy_report.md
-            pullguard-report.html
 
       - name: Job Summary
         if: always()
