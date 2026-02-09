@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "violations_count": 6,
+  "violations_count": 13,
   "violations": {
-    "total": 6,
-    "critical": 4,
-    "high": 2,
+    "total": 13,
+    "critical": 8,
+    "high": 5,
     "medium": 0,
     "low": 0,
     "details": [
@@ -49,19 +49,68 @@
         "line": 44,
         "severity": "high",
         "message": "Insecure deserialization with pickle. Use secure alternatives."
+      },
+      {
+        "id": "PY-CRYPTO-001",
+        "file": "crypto.py",
+        "line": 15,
+        "severity": "high",
+        "message": "Weak hashing algorithm (MD5/SHA1). Use secure alternatives."
+      },
+      {
+        "id": "PY-CRYPTO-001",
+        "file": "crypto.py",
+        "line": 31,
+        "severity": "high",
+        "message": "Using insecure random module for security. Use secure alternatives."
+      },
+      {
+        "id": "PY-CRYPTO-001",
+        "file": "crypto.py",
+        "line": 38,
+        "severity": "high",
+        "message": "Weak hashing algorithm (MD5/SHA1). Use secure alternatives."
+      },
+      {
+        "id": "PY-SECRET-001",
+        "file": "database.py",
+        "line": 9,
+        "severity": "critical",
+        "message": "Hardcoded password detected. Use environment variables or secrets management."
+      },
+      {
+        "id": "PY-SECRET-001",
+        "file": "database.py",
+        "line": 10,
+        "severity": "critical",
+        "message": "Hardcoded API key detected. Use environment variables or secrets management."
+      },
+      {
+        "id": "PY-SQL-001",
+        "file": "database.py",
+        "line": 22,
+        "severity": "critical",
+        "message": "SQL injection via f-string formatting. Use parameterized queries."
+      },
+      {
+        "id": "PY-SQL-001",
+        "file": "database.py",
+        "line": 40,
+        "severity": "critical",
+        "message": "SQL injection via f-string in UPDATE. Use parameterized queries."
       }
     ]
   },
-  "ai_suggestions": 6,
-  "comments_posted": 3,
+  "ai_suggestions": 13,
+  "comments_posted": 5,
   "policy_status": "failed",
-  "timestamp": "2026-02-09T08:01:04.455842",
+  "timestamp": "2026-02-09T08:06:58.237400",
   "failed_on_policy": true,
   "cost_summary": {
-    "total_tokens": 1756,
-    "total_cost_usd": 0.0566,
+    "total_tokens": 3793,
+    "total_cost_usd": 0.1223,
     "max_cost_usd": 0.5,
-    "remaining_budget_usd": 0.4434,
+    "remaining_budget_usd": 0.3777,
     "budget_exceeded": false
   },
   "repository": "sristikulkarni-gif/PullGuardTest",

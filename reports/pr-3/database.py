@@ -41,3 +41,4 @@ class DatabaseManager:
         cursor = self.connection.cursor()
         cursor.execute(query)
         self.connection.commit()
+# Updated 1770624350

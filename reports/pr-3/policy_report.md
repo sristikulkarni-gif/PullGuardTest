@@ -1,14 +1,14 @@
 # PullGuard Policy Compliance Report
 
-**Generated:** 2026-02-09T08:01:04Z
+**Generated:** 2026-02-09T08:06:58Z
 
 **Overall Status:** ❌ FAILED
 
 ## Summary
 
-- **Total Violations:** 6
-- **Critical:** 4
-- **High:** 2
+- **Total Violations:** 13
+- **Critical:** 8
+- **High:** 5
 - **Medium:** 0
 - **Low:** 0
 

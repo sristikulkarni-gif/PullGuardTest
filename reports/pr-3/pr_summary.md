@@ -4,13 +4,13 @@
 
 ### 📊 Analysis Results
 
-**AST Policy Violations:** 6 _(all posted, no limit)_
-- 🔴 Critical: 4
-- 🟠 High: 2
+**AST Policy Violations:** 13 _(all posted, no limit)_
+- 🔴 Critical: 8
+- 🟠 High: 5
 - 🟡 Medium: 0
 - 🔵 Low: 0
 
-**🤖 AI-Powered Code Fixes:** 6 _(max: 30)_
+**🤖 AI-Powered Code Fixes:** 13 _(max: 30)_
 - Semantic error detection
 - Security vulnerability fixes
 - Replaceable code suggestions
@@ -33,9 +33,9 @@
    - File: `api.py:22`
    - Rule: `PY-CMD-001`
 
-5. 🟠 **Using insecure random module for security. Use secure alternatives.**
-   - File: `api.py:36`
-   - Rule: `PY-CRYPTO-001`
+5. 🔴 **Hardcoded password detected. Use environment variables or secrets management.**
+   - File: `database.py:9`
+   - Rule: `PY-SECRET-001`
 
 ---
 _💡 Click on AI suggestions in inline comments to apply fixes directly_
