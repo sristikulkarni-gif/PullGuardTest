@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "violations_count": 6,
+  "violations": {
+    "total": 6,
+    "critical": 4,
+    "high": 2,
+    "medium": 0,
+    "low": 0,
+    "details": [
+      {
+        "id": "PY-AST-001",
+        "file": "api.py",
+        "line": 50,
+        "severity": "critical",
+        "message": "Dangerous use of 'eval()' detected. This can execute arbitrary code."
+      },
+      {
+        "id": "PY-SECRET-001",
+        "file": "api.py",
+        "line": 12,
+        "severity": "critical",
+        "message": "Hardcoded API key detected. Use environment variables or secrets management."
+      },
+      {
+        "id": "PY-CMD-001",
+        "file": "api.py",
+        "line": 19,
+        "severity": "critical",
+        "message": "Command injection via os.system() with f-string. Use parameterized commands or shell=False."
+      },
+      {
+        "id": "PY-CMD-001",
+        "file": "api.py",
+        "line": 22,
+        "severity": "critical",
+        "message": "Command injection via subprocess with shell=True. Use parameterized commands or shell=False."
+      },
+      {
+        "id": "PY-CRYPTO-001",
+        "file": "api.py",
+        "line": 36,
+        "severity": "high",
+        "message": "Using insecure random module for security. Use secure alternatives."
+      },
+      {
+        "id": "PY-CRYPTO-001",
+        "file": "api.py",
+        "line": 44,
+        "severity": "high",
+        "message": "Insecure deserialization with pickle. Use secure alternatives."
+      }
+    ]
+  },
+  "ai_suggestions": 6,
+  "comments_posted": 3,
+  "policy_status": "failed",
+  "timestamp": "2026-02-09T08:01:04.455842",
+  "failed_on_policy": true,
+  "cost_summary": {
+    "total_tokens": 1756,
+    "total_cost_usd": 0.0566,
+    "max_cost_usd": 0.5,
+    "remaining_budget_usd": 0.4434,
+    "budget_exceeded": false
+  },
+  "repository": "sristikulkarni-gif/PullGuardTest",
+  "pr_number": 3
+}
