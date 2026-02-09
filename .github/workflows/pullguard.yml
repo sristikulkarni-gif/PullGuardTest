@@ -48,6 +48,16 @@ jobs:
           # Check if request was successful
           if [ "$http_code" -ne 200 ]; then
             echo "❌ Error: PullGuard API returned status $http_code"
+            echo "Response:"
+            cat response.json
+            echo ""
+            echo "⚠️  Check that PULLGUARD_API_KEY secret is set correctly"
+            exit 1
+          fi
+
+          # Verify response has required fields
+          if ! cat response.json | jq -e '.status' > /dev/null 2>&1; then
+            echo "❌ Error: Invalid API response format"
             cat response.json
             exit 1
           fi
