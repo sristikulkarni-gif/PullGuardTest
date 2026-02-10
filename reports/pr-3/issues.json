@@ -105,13 +105,13 @@
   "ast_comments_posted": 2,
   "comments_posted": 5,
   "policy_status": "failed",
-  "timestamp": "2026-02-10T06:49:15.550447",
+  "timestamp": "2026-02-10T07:02:18.723177",
   "failed_on_policy": true,
   "cost_summary": {
-    "total_tokens": 3814,
-    "total_cost_usd": 0.1235,
+    "total_tokens": 3776,
+    "total_cost_usd": 0.1213,
     "max_cost_usd": 0.5,
-    "remaining_budget_usd": 0.3765,
+    "remaining_budget_usd": 0.3787,
     "budget_exceeded": false
   },
   "repository": "sristikulkarni-gif/PullGuardTest",

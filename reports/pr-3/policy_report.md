@@ -1,6 +1,6 @@
 # PullGuard Policy Compliance Report
 
-**Generated:** 2026-02-10T06:49:15Z
+**Generated:** 2026-02-10T07:02:18Z
 
 **Overall Status:** ❌ FAILED
 
