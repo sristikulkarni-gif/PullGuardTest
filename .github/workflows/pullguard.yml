@@ -113,6 +113,7 @@ jobs:
             violations_count: (.violations_count // .violations.total // 0),
             violations: .violations,
             ai_suggestions: .ai_suggestions,
+            ast_comments_posted: (.ast_comments_posted // 0),
             comments_posted: .comments_posted,
             policy_status: .policy_status,
             timestamp: .timestamp,
@@ -283,6 +284,7 @@ jobs:
             violations_medium=$(cat response.json | jq -r '.violations.medium')
             violations_low=$(cat response.json | jq -r '.violations.low')
             ai_suggestions=$(cat response.json | jq -r '.ai_suggestions')
+            ast_comments=$(cat response.json | jq -r '.ast_comments_posted // 0')
             comments_posted=$(cat response.json | jq -r '.comments_posted')
             policy_status=$(cat response.json | jq -r '.policy_status')
 
@@ -292,6 +294,7 @@ jobs:
             echo "### 📊 Analysis Results" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "**AST Policy Violations:** $violations_total _(all posted, no limit)_" >> $GITHUB_STEP_SUMMARY
+            echo "**AST Inline Comments:** $ast_comments" >> $GITHUB_STEP_SUMMARY
             echo "- 🔴 Critical: $violations_critical" >> $GITHUB_STEP_SUMMARY
             echo "- 🟠 High: $violations_high" >> $GITHUB_STEP_SUMMARY
             echo "- 🟡 Medium: $violations_medium" >> $GITHUB_STEP_SUMMARY
