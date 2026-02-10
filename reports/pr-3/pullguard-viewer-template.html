@@ -391,16 +391,48 @@
             const issues = JSON.parse(issuesJsonText);
             const stats = document.getElementById('stats');
 
+            // Calculate AST inline comments (from API field or estimate from total - AI)
+            const astComments = issues.ast_comments_posted || (issues.comments_posted || 0) - (issues.ai_suggestions || 0) - 1;
+            const totalViolations = issues.violations_count || issues.violations?.total || 0;
+            const criticalCount = issues.violations?.critical || 0;
+            const highCount = issues.violations?.high || 0;
+            const mediumCount = issues.violations?.medium || 0;
+            const lowCount = issues.violations?.low || 0;
+
             stats.innerHTML = `
-                <div class="stat-box">
-                    <h3>${issues.violations_count || issues.violations?.total || 0}</h3>
+                <div class="stat-box" style="border-color: ${criticalCount > 0 ? '#dc3545' : '#e0e0e0'};">
+                    <h3>${totalViolations}</h3>
                     <p>Total Violations</p>
                 </div>
-                <div class="stat-box">
+                <div class="stat-box" style="border-color: #6f42c1;">
+                    <h3>${astComments > 0 ? astComments : 0}</h3>
+                    <p>AST Inline Comments</p>
+                </div>
+                <div class="stat-box" style="border-color: #0d6efd;">
                     <h3>${issues.ai_suggestions || 0}</h3>
                     <p>AI Suggestions</p>
                 </div>
                 <div class="stat-box">
+                    <h3>${issues.comments_posted || 0}</h3>
+                    <p>Total Comments Posted</p>
+                </div>
+                <div class="stat-box" style="border-color: #dc3545;">
+                    <h3>${criticalCount}</h3>
+                    <p>Critical</p>
+                </div>
+                <div class="stat-box" style="border-color: #fd7e14;">
+                    <h3>${highCount}</h3>
+                    <p>High</p>
+                </div>
+                <div class="stat-box" style="border-color: #ffc107;">
+                    <h3>${mediumCount}</h3>
+                    <p>Medium</p>
+                </div>
+                <div class="stat-box" style="border-color: #0dcaf0;">
+                    <h3>${lowCount}</h3>
+                    <p>Low</p>
+                </div>
+                <div class="stat-box" style="border-color: ${issues.policy_status === 'failed' ? '#dc3545' : '#198754'};">
                     <h3>${issues.policy_status || 'N/A'}</h3>
                     <p>Policy Status</p>
                 </div>
@@ -412,7 +444,11 @@
                     <h3>N/A</h3>
                     <p>Total Violations</p>
                 </div>
-                <div class="stat-box">
+                <div class="stat-box" style="border-color: #6f42c1;">
+                    <h3>N/A</h3>
+                    <p>AST Inline Comments</p>
+                </div>
+                <div class="stat-box" style="border-color: #0d6efd;">
                     <h3>N/A</h3>
                     <p>AI Suggestions</p>
                 </div>
