@@ -113,6 +113,7 @@ jobs:
             pr_summary.md
             issues.json
             policy_report.md
+            pullguard-report.html
 
       - name: Job Summary
         if: always()
@@ -120,16 +121,16 @@ jobs:
           echo "## 🔒 PullGuard Security Analysis" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          if [ -f "response.json" ]; then
-            violations_total=$(cat response.json | jq -r '.violations.total')
-            violations_critical=$(cat response.json | jq -r '.violations.critical')
-            violations_high=$(cat response.json | jq -r '.violations.high')
-            violations_medium=$(cat response.json | jq -r '.violations.medium')
-            violations_low=$(cat response.json | jq -r '.violations.low')
-            ai_suggestions=$(cat response.json | jq -r '.ai_suggestions')
-            ast_comments=$(cat response.json | jq -r '.ast_comments_posted // 0')
-            comments_posted=$(cat response.json | jq -r '.comments_posted')
-            policy_status=$(cat response.json | jq -r '.policy_status')
+          if [ -f "response.json" ] && jq -e '.status' response.json > /dev/null 2>&1; then
+            violations_total=$(jq -r '.violations.total // "0"' response.json 2>/dev/null || echo "0")
+            violations_critical=$(jq -r '.violations.critical // "0"' response.json 2>/dev/null || echo "0")
+            violations_high=$(jq -r '.violations.high // "0"' response.json 2>/dev/null || echo "0")
+            violations_medium=$(jq -r '.violations.medium // "0"' response.json 2>/dev/null || echo "0")
+            violations_low=$(jq -r '.violations.low // "0"' response.json 2>/dev/null || echo "0")
+            ai_suggestions=$(jq -r '.ai_suggestions // "0"' response.json 2>/dev/null || echo "0")
+            ast_comments=$(jq -r '.ast_comments_posted // "0"' response.json 2>/dev/null || echo "0")
+            comments_posted=$(jq -r '.comments_posted // "0"' response.json 2>/dev/null || echo "0")
+            policy_status=$(jq -r '.policy_status // "unknown"' response.json 2>/dev/null || echo "unknown")
 
             echo "**Policy Status:** \`$policy_status\`" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
@@ -150,7 +151,7 @@ jobs:
 
             echo "### 🌐 Interactive Report Viewer" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**[🚀 Open Interactive Report](https://sristikulkarni-gif.github.io/PullGuardTest/reports/pr-${{ github.event.pull_request.number }}/pullguard-report.html)**" >> $GITHUB_STEP_SUMMARY
+            echo "**[🚀 Open Interactive Report](https://sristikulkarni-gif.github.io/${{ github.event.repository.name }}/reports/pr-${{ github.event.pull_request.number }}/pullguard-report.html)**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "👆 Click above to view the report directly in your browser (no download needed!)" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
