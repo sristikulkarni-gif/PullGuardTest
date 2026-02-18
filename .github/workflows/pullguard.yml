@@ -94,16 +94,6 @@ jobs:
           echo "✅ Artifacts extracted from API response"
           ls -lh pr_summary.md issues.json policy_report.md pullguard-report.html 2>/dev/null || echo "⚠️  Some files missing"
 
-      - name: Deploy to GitHub Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          destination_dir: reports/pr-${{ github.event.pull_request.number }}
-          keep_files: true
-          enable_jekyll: false
-
       - name: Upload Analysis Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -122,71 +112,39 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ -f "response.json" ] && jq -e '.status' response.json > /dev/null 2>&1; then
-            violations_total=$(jq -r '.violations.total // "0"' response.json 2>/dev/null || echo "0")
-            violations_critical=$(jq -r '.violations.critical // "0"' response.json 2>/dev/null || echo "0")
-            violations_high=$(jq -r '.violations.high // "0"' response.json 2>/dev/null || echo "0")
-            violations_medium=$(jq -r '.violations.medium // "0"' response.json 2>/dev/null || echo "0")
-            violations_low=$(jq -r '.violations.low // "0"' response.json 2>/dev/null || echo "0")
-            ai_suggestions=$(jq -r '.ai_suggestions // "0"' response.json 2>/dev/null || echo "0")
-            ast_comments=$(jq -r '.ast_comments_posted // "0"' response.json 2>/dev/null || echo "0")
-            comments_posted=$(jq -r '.comments_posted // "0"' response.json 2>/dev/null || echo "0")
-            policy_status=$(jq -r '.policy_status // "unknown"' response.json 2>/dev/null || echo "unknown")
 
-            echo "**Policy Status:** \`$policy_status\`" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            echo "### 📊 Analysis Results" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**AST Policy Violations:** $violations_total _(all posted, no limit)_" >> $GITHUB_STEP_SUMMARY
-            echo "**AST Inline Comments:** $ast_comments" >> $GITHUB_STEP_SUMMARY
-            echo "- 🔴 Critical: $violations_critical" >> $GITHUB_STEP_SUMMARY
-            echo "- 🟠 High: $violations_high" >> $GITHUB_STEP_SUMMARY
-            echo "- 🟡 Medium: $violations_medium" >> $GITHUB_STEP_SUMMARY
-            echo "- 🔵 Low: $violations_low" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**🤖 AI-Powered Code Fixes:** $ai_suggestions _(max: 30)_" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Comments Posted:** $comments_posted" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            echo "### 🌐 Interactive Report Viewer" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**[🚀 Open Interactive Report](https://sristikulkarni-gif.github.io/${{ github.event.repository.name }}/reports/pr-${{ github.event.pull_request.number }}/pullguard-report.html)**" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "👆 Click above to view the report directly in your browser (no download needed!)" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "The interactive viewer includes:" >> $GITHUB_STEP_SUMMARY
-            echo "- 🛡️ **Beautiful PullGuard UI** with statistics dashboard" >> $GITHUB_STEP_SUMMARY
-            echo "- 📄 **PR Summary** - View in modal dialog" >> $GITHUB_STEP_SUMMARY
-            echo "- 📋 **Issues JSON** - Formatted with syntax highlighting" >> $GITHUB_STEP_SUMMARY
-            echo "- 📊 **Policy Report** - Full compliance details" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 📁 Download Raw Files" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**[📥 Download Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)** (scroll to bottom of page)" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Files included in \`pullguard-analysis.zip\`:" >> $GITHUB_STEP_SUMMARY
-            echo "- \`pr_summary.md\` - Markdown summary" >> $GITHUB_STEP_SUMMARY
-            echo "- \`issues.json\` - Machine-readable findings" >> $GITHUB_STEP_SUMMARY
-            echo "- \`policy_report.md\` - Policy compliance report" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            echo "### 📝 Quick View" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "<details>" >> $GITHUB_STEP_SUMMARY
-            echo "<summary>View PR Summary (click to expand)</summary>" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            if [ -f "pr_summary.md" ]; then
+            # --- PR Summary (full content from backend) ---
+            if [ -s "pr_summary.md" ]; then
               cat pr_summary.md >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
             fi
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "</details>" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
 
-            echo "---" >> $GITHUB_STEP_SUMMARY
-            echo "_💡 Click on AI suggestions in PR comments to apply fixes directly_" >> $GITHUB_STEP_SUMMARY
+            # --- All Violations Table (from issues.json) ---
+            if [ -s "issues.json" ] && jq -e '.violations.details | length > 0' issues.json > /dev/null 2>&1; then
+              echo "### 📋 Violations Detail" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "| File | Line | Severity | Rule | Issue |" >> $GITHUB_STEP_SUMMARY
+              echo "|------|------|----------|------|-------|" >> $GITHUB_STEP_SUMMARY
+              jq -r '.violations.details[] | "| `\(.file)` | \(.line) | \(.severity | ascii_upcase) | `\(.rule_id // "N/A")` | \(.message) |"' issues.json >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            # --- Policy Report (collapsible) ---
+            if [ -s "policy_report.md" ]; then
+              echo "<details>" >> $GITHUB_STEP_SUMMARY
+              echo "<summary>📊 Full Policy Compliance Report (click to expand)</summary>" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              cat policy_report.md >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "</details>" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            # --- Download link ---
+            echo "**[📥 Download Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)** — includes pr_summary.md, issues.json, policy_report.md, pullguard-report.html" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
+            echo "---" >> $GITHUB_STEP_SUMMARY
             echo "*Powered by [PullGuard](https://github.com/sristikulkarni-gif/PullGuardProject) - Azure AI Security Analysis*" >> $GITHUB_STEP_SUMMARY
           else
-            echo "⚠️ No response data available" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ API call failed — no analysis data available. Check that PULLGUARD_API_KEY secret is set." >> $GITHUB_STEP_SUMMARY
           fi
